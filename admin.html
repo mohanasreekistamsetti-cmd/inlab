@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Admin</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+      color: #243044;
+      background: #f4f7fb;
+    }
+    h1 { color: #185a8d; }
+    a { color: #185a8d; }
+    input, button {
+      padding: 10px;
+      margin: 5px 4px 5px 0;
+      font-size: 1rem;
+    }
+    button {
+      color: white;
+      background: #185a8d;
+      border: 0;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover { background: #10436b; }
+    .remove { background: #b42318; }
+    li { margin: 12px 0; }
+    .card {
+      margin-top: 20px;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px #00000012;
+    }
+  </style>
+</head>
+<body>
+  <h1>Admin — Manage Books</h1>
+  <p><a href="index.html">Home</a></p>
+
+  <section class="card">
+    <h2>Add a Book</h2>
+    <form id="bookForm">
+      <label for="title">Title</label>
+      <input id="title" type="text" placeholder="Book title" required>
+
+      <label for="author">Author</label>
+      <input id="author" type="text" placeholder="Author name" required>
+
+      <button type="submit">Add Book</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Book List</h2>
+    <ul id="bookList">
+      <li><strong>The Hobbit</strong> — J.R.R. Tolkien <button class="remove" type="button">Remove</button></li>
+      <li><strong>To Kill a Mockingbird</strong> — Harper Lee <button class="remove" type="button">Remove</button></li>
+      <li><strong>The Great Gatsby</strong> — F. Scott Fitzgerald <button class="remove" type="button">Remove</button></li>
+    </ul>
+    <p id="emptyMessage" hidden>No books in the list.</p>
+  </section>
+
+  <script>
+    const form = document.getElementById("bookForm");
+    const titleInput = document.getElementById("title");
+    const authorInput = document.getElementById("author");
+    const bookList = document.getElementById("bookList");
+    const emptyMessage = document.getElementById("emptyMessage");
+
+    function updateEmptyMessage() {
+      emptyMessage.hidden = bookList.children.length > 0;
+    }
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const title = titleInput.value.trim();
+      const author = authorInput.value.trim();
+
+      if (!title || !author) return;
+
+      const item = document.createElement("li");
+      const bookName = document.createElement("strong");
+      bookName.textContent = title;
+
+      const removeButton = document.createElement("button");
+      removeButton.type = "button";
+      removeButton.className = "remove";
+      removeButton.textContent = "Remove";
+
+      item.append(bookName, document.createTextNode(" — " + author + " "), removeButton);
+      bookList.appendChild(item);
+
+      form.reset();
+      titleInput.focus();
+      updateEmptyMessage();
+    });
+
+    bookList.addEventListener("click", function (event) {
+      if (event.target.classList.contains("remove")) {
+        event.target.closest("li").remove();
+        updateEmptyMessage();
+      }
+    });
+
+    updateEmptyMessage();
+  </script>
+</body>
+</html>
